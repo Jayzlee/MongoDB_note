@@ -1,0 +1,10 @@
+db.students.find({"scores.type": "homework"}).forEach(
+  function(s){
+    var sortedScores = s.scores.sort(
+      function(a, b){
+        return a.score<b.score && a.type=="homework";
+      }
+    );
+    var lowestHomeworkScore = sortedScores[sortedScores.length-1].score;
+    db.students.update({_id: s._id},{$pull: {scores: {score: lowestHomeworkScore}}}, {multi: true});
+  })
